@@ -6,7 +6,7 @@
 <title>Pasa el prompt</title>
 <meta name="description" content="IA para construir sin programar: guías visuales, paso a paso, de @pasaelprompt.">
 <style>
-@font-face { font-family: "Anton"; src: url("guias/assets/Anton-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Anton"; src: url("assets/Anton-Regular.ttf") format("truetype"); font-display: swap; }
 :root { --bg1:#F7F9FC; --bg2:#E4EAF6; --ink:#0E1116; --ink2:#5B6474; --accent:#2F5BFF;
   --accent-lo:#1E45E6; --card:#FFFFFF; --money:#16A34A; --bad:#F03D4F; }
 * { box-sizing:border-box; }
@@ -42,7 +42,9 @@ h3 { font-size:clamp(26px,7.4vw,34px); line-height:1.2; }
 .st b { display:block; font:400 24px/1 "Anton", Impact, sans-serif; color:var(--accent); margin-bottom:4px; white-space:nowrap; }
 .st.money b { color:var(--money); } .st.bad b { color:var(--bad); }
 .st span { font-size:12px; line-height:1.3; color:var(--ink2); display:block; }
-.go { display:inline-flex; align-items:center; gap:6px; color:var(--accent-lo); font-weight:700; }
+.btn.small { padding:12px 16px; font-size:15px; }
+.lock { width:14px; height:14px; vertical-align:-2px; margin-right:2px; }
+.gate { display:flex; align-items:center; gap:8px; color:var(--ink2); font-size:14px; margin:4px 2px 0; }
 .empty { color:var(--ink2); }
 footer { margin-top:40px; font-size:12px; color:var(--ink2); display:flex; gap:16px; flex-wrap:wrap; }
 footer a { color:var(--ink2); }
@@ -57,8 +59,9 @@ footer a { color:var(--ink2); }
 <a class="btn" href="https://www.instagram.com/pasaelprompt/">Seguir @pasaelprompt <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
 <div class="hows"><div class="how"><b>1</b><span>Ves el reel</span></div><div class="how"><b>2</b><span>Comentas la palabra</span></div><div class="how"><b>3</b><span>Te llega la guía por mensaje</span></div></div>
 <h2>Las <span class="hl">guías</span></h2>
-<a class="guide" href="guias/gta/"><div class="pic"><img src="guias/gta/media/hero.jpg" alt="" loading="lazy"><span class="word">comenta <b>GTA</b></span><span class="credit"><b>VÍDEO</b> Rockstar Games</span></div><div class="body"><h3>Gana dinero con <span class="hl">GTA</span> y la IA</h3><div class="stats"><div class="st "><b>18</b><span>Campañas de GTA 6 abiertas</span></div><div class="st money"><b>0,18–2 $</b><span>Por cada 1.000 vistas</span></div><div class="st bad"><b>10 %</b><span>Se queda Content Rewards</span></div></div><span class="go">Abrir la guía <svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div></a>
-<a class="guide" href="guias/clips/"><div class="pic"><img src="guias/clips/media/hero.jpg" alt="" loading="lazy"><span class="word">comenta <b>CLIPS</b></span><span class="credit"><b>VÍDEO</b> Rockstar Games</span></div><div class="body"><h3>Tu primer clip pagado de <span class="hl">GTA 6</span></h3><div class="stats"><div class="st "><b>18</b><span>campañas de GTA 6 abiertas el 24/11</span></div><div class="st money"><b>0,18–2 $</b><span>por cada 1.000 visualizaciones</span></div><div class="st bad"><b>10 %</b><span>se queda Content Rewards</span></div></div><span class="go">Abrir la guía <svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></div></a>
+<div class="guide"><div class="pic"><img src="assets/card-fa83baff03.jpg" alt="" loading="lazy"><span class="word"><svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> comenta <b>GTA</b></span><span class="credit"><b>VÍDEO</b> Rockstar Games</span></div><div class="body"><h3>Gana dinero con <span class="hl">GTA</span> y la IA</h3><div class="stats"><div class="st "><b>18</b><span>Campañas de GTA 6 abiertas</span></div><div class="st money"><b>0,18–2 $</b><span>Por cada 1.000 vistas</span></div><div class="st bad"><b>10 %</b><span>Se queda Content Rewards</span></div></div><a class="btn small" href="https://www.instagram.com/pasaelprompt/" rel="noopener">Sígueme y comenta GTA <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div></div>
+<div class="guide"><div class="pic"><img src="assets/card-621267fa0d.jpg" alt="" loading="lazy"><span class="word"><svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> comenta <b>CLIPS</b></span><span class="credit"><b>VÍDEO</b> Rockstar Games</span></div><div class="body"><h3>Tu primer clip pagado de <span class="hl">GTA 6</span></h3><div class="stats"><div class="st "><b>18</b><span>campañas de GTA 6 abiertas el 24/11</span></div><div class="st money"><b>0,18–2 $</b><span>por cada 1.000 visualizaciones</span></div><div class="st bad"><b>10 %</b><span>se queda Content Rewards</span></div></div><a class="btn small" href="https://www.instagram.com/reel/DgLp--Mh4Yw/" rel="noopener">Sígueme y comenta CLIPS <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div></div>
+<p class="gate">Las guías llegan por mensaje a quien sigue la cuenta.</p>
 <footer><a href="privacy-policy/">Privacidad</a><a href="terms-of-service/">Condiciones</a><span>Sin cookies ni seguimiento.</span></footer>
 </main>
 </body>
