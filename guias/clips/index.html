@@ -27,6 +27,14 @@ h2 { font-size:clamp(30px,9vw,42px); line-height:1.2; margin:8px 0 6px; }
 .ref { font-size:10px; vertical-align:super; text-decoration:none; color:var(--accent-lo); margin-left:2px; font-weight:600; }
 .screen { position:relative; background:var(--card); border-radius:24px; padding:8px; box-shadow:0 14px 40px rgba(26,47,143,.16); margin:0 0 14px; }
 .screen img { display:block; width:100%; height:auto; max-height:520px; object-fit:cover; object-position:top; border-radius:18px; }
+.menu { padding:0 0 14px; overflow:hidden; }
+.bar3 { display:flex; align-items:center; gap:6px; padding:12px 14px; border-bottom:1px solid #E3E8F3; margin-bottom:12px; }
+.bar3 i { width:10px; height:10px; border-radius:50%; background:#D5DCEB; }
+.bar3 span { margin-left:8px; font-weight:700; font-size:14px; color:var(--ink2); }
+.path { display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:6px 14px; }
+.pill { background:#EEF2FB; color:var(--ink); font-weight:600; font-size:15px; padding:9px 12px; border-radius:10px; }
+.pill.last { background:var(--accent); color:#fff; box-shadow:0 6px 16px rgba(47,91,255,.28); }
+.chev { color:var(--ink2); font-size:20px; line-height:1; }
 .screen video { display:block; width:100%; height:auto; border-radius:18px; background:#dfe6f5; }
 .credit { position:absolute; top:18px; right:18px; z-index:1; background:rgba(14,17,22,.72); color:#fff; font-size:12px; padding:5px 9px; border-radius:10px; }
 .credit b { font:700 9px/1 ui-monospace, Menlo, monospace; letter-spacing:.2em; opacity:.75; margin-right:4px; }
@@ -43,7 +51,12 @@ h2 { font-size:clamp(30px,9vw,42px); line-height:1.2; margin:8px 0 6px; }
 .rate { font-size:13px; color:var(--ink2); margin:10px 0 12px; }
 .views { display:block; }
 .views span { display:block; font-weight:700; margin-bottom:6px; }
-input[type=range] { width:100%; accent-color:var(--accent); height:28px; }
+.track { position:relative; display:block; }
+input[type=range] { width:100%; accent-color:var(--accent); height:32px; margin:0; touch-action:pan-y; }
+.capmark { position:absolute; top:4px; width:3px; height:24px; margin-left:-1px; background:var(--bad); border-radius:2px; pointer-events:none; }
+.capmark::after { content:"tope"; position:absolute; top:26px; left:50%; transform:translateX(-50%); font:700 10px/1 ui-monospace, Menlo, monospace;
+  color:var(--bad); letter-spacing:.08em; text-transform:uppercase; }
+.capline { display:none; margin:10px 0 0; padding:10px 12px; border-radius:12px; background:var(--bad-tint); color:var(--ink); font-weight:600; font-size:14px; }
 .result { margin-top:12px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
 .result b { font:400 56px/1 "Anton", Impact, sans-serif; color:var(--money); }
 .result span { font-size:13px; color:var(--ink2); flex:1 1 180px; }
@@ -92,8 +105,9 @@ input[type=range] { width:100%; accent-color:var(--accent); height:28px; }
     <div class="card">
     <div class="chips" role="group" aria-label="Campaña"><button type="button" class="chip on" data-i="0">Tokyo Girl</button><button type="button" class="chip" data-i="1">ArthurTV</button></div>
     <p class="rate" id="rate"></p>
-    <label class="views"><span id="vlabel"></span><input id="views" type="range" min="0" max="300000" step="1000" value="50000"></label>
+    <label class="views"><span id="vlabel"></span><span class="track"><input id="views" type="range" min="0" max="300000" step="1000" value="50000"><i id="capmark" class="capmark"></i></span></label>
     <div class="result"><b id="pay"></b><span id="why"></span></div>
+    <p class="capline" id="capline" role="status"></p>
     </div>
     <p class="note">Tarifas del 24/11/2026. Cambian cada día: mira la campaña antes de cortar.</p>
     </section>
@@ -133,21 +147,39 @@ input[type=range] { width:100%; accent-color:var(--accent); height:28px; }
 <div class="bar"><span>¿Te sirvió? Hay más en @pasaelprompt.</span><a class="btn" href="https://www.instagram.com/pasaelprompt/">Seguir @pasaelprompt</a></div>
 <script>
 (function () {
-  var D = {"fee": 0.1, "presets": [{"name": "Tokyo Girl", "rate": 0.7, "min": 2, "max": 35, "where": "TikTok e Instagram", "ref": 2}, {"name": "ArthurTV", "rate": 1.5, "min": 15, "max": 300, "where": "TikTok", "ref": 2}]}, i = 0, v = document.getElementById("views");
+  // Each campaign gets its own range: the slider runs to 1.25 x the views where the cap is reached and starts at
+  // 40 % of that point, so both directions change the figure (the old fixed 0-300.000 range sat on the cap).
+  var D = {"fee": 0.1, "presets": [{"name": "Tokyo Girl", "rate": 0.7, "min": 2, "max": 35, "where": "TikTok e Instagram", "ref": 2}, {"name": "ArthurTV", "rate": 1.5, "min": 15, "max": 300, "where": "TikTok", "ref": 2}], "views_max": 300000}, i = 0, v = document.getElementById("views"), mark = document.getElementById("capmark");
   var f = function (x) { return x.toLocaleString("es", {minimumFractionDigits: x % 1 ? 2 : 0, maximumFractionDigits: 2}); };
+  function step(x) { return x > 100000 ? 5000 : x > 20000 ? 1000 : 100; }
+  function capViews(p) { return p.max > 0 ? Math.round(p.max / p.rate * 1000) : 0; }
+  function setRange() {
+    var p = D.presets[i], c = capViews(p), top = c ? c * 1.25 : D.views_max, s = step(top);
+    top = Math.ceil(top / s) * s;
+    v.min = 0; v.max = top; v.step = s;
+    v.value = Math.round((c ? c * 0.4 : top * 0.4) / s) * s;
+    if (c) { mark.style.display = "block"; mark.style.left = "calc(10px + (100% - 20px) * " + (c / top) + ")"; mark.title = "tope"; }
+    else { mark.style.display = "none"; }
+  }
   function draw() {
-    var p = D.presets[i], n = +v.value, gross = n / 1000 * p.rate, capped = Math.min(gross, p.max);
-    var paid = capped < p.min ? 0 : capped, net = paid * (1 - D.fee);
+    var p = D.presets[i], n = +v.value, cap = p.max > 0 ? p.max : Infinity, gross = n / 1000 * p.rate;
+    var capped = Math.min(gross, cap), paid = capped < (p.min || 0) ? 0 : capped, net = paid * (1 - D.fee);
+    var c = capViews(p), atCap = p.max > 0 && gross >= cap;
     document.getElementById("vlabel").textContent = f(n) + " visualizaciones";
-    document.getElementById("rate").textContent = f(p.rate) + " $ por cada 1.000 · mínimo " + f(p.min) + " $ · tope " + f(p.max) + " $ por clip · " + p.where;
+    document.getElementById("rate").textContent = f(p.rate) + " $ por cada 1.000" + (p.min ? " · mínimo " + f(p.min) + " $" : "") +
+      (p.max ? " · tope " + f(p.max) + " $ por clip" : "") + (p.where ? " · " + p.where : "");
     document.getElementById("pay").textContent = f(Math.round(net * 100) / 100) + " $";
-    document.getElementById("why").textContent = capped < p.min ? "No llega al mínimo de " + f(p.min) + " $ por clip." :
-      (gross > p.max ? "Llega al tope de " + f(p.max) + " $; " : f(Math.round(gross * 100) / 100) + " $ brutos; ") + "menos el 10 % de comisión.";
+    document.getElementById("why").textContent = capped < (p.min || 0) ? "No llega al mínimo de " + f(p.min) + " $ por clip." :
+      (atCap ? "Llega al tope de " + f(p.max) + " $; " : f(Math.round(gross * 100) / 100) + " $ brutos; ") + "menos el 10 % de comisión.";
+    var capline = document.getElementById("capline");
+    capline.textContent = atCap ? "Tope alcanzado: a partir de " + f(c) + " visualizaciones este clip no paga más. Haz otro clip." : "";
+    capline.style.display = atCap ? "block" : "none";
   }
   document.querySelectorAll(".chip").forEach(function (b) {
     b.addEventListener("click", function () { document.querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
-      b.classList.add("on"); i = +b.dataset.i; draw(); }); });
-  v.addEventListener("input", draw); draw();
+      b.classList.add("on"); i = +b.dataset.i; setRange(); draw(); }); });
+  v.addEventListener("input", draw); v.addEventListener("change", draw);
+  setRange(); draw();
 })();
 </script>
 
