@@ -103,7 +103,7 @@ input[type=range] { width:100%; accent-color:var(--accent); height:32px; margin:
     <h2>¿Cuánto te deja <span class="hl">un clip</span>?</h2>
     <p class="sub">Mueve la barra. Ya resta el tope y la comisión.</p>
     <div class="card">
-    <div class="chips" role="group" aria-label="Campaña"><button type="button" class="chip on" data-i="0">Tokyo Girl</button><button type="button" class="chip" data-i="1">ArthurTV</button></div>
+    <div class="chips" role="group" aria-label="Campaña"><button type="button" class="chip on" data-i="0">ArthurTV</button><button type="button" class="chip" data-i="1">Tokyo Girl</button></div>
     <p class="rate" id="rate"></p>
     <label class="views"><span id="vlabel"></span><span class="track"><input id="views" type="range" min="0" max="300000" step="1000" value="50000"><i id="capmark" class="capmark"></i></span></label>
     <div class="result"><b id="pay"></b><span id="why"></span></div>
@@ -149,7 +149,7 @@ input[type=range] { width:100%; accent-color:var(--accent); height:32px; margin:
 (function () {
   // Each campaign gets its own range: the slider runs to 1.25 x the views where the cap is reached and starts at
   // 40 % of that point, so both directions change the figure (the old fixed 0-300.000 range sat on the cap).
-  var D = {"fee": 0.1, "presets": [{"name": "Tokyo Girl", "rate": 0.7, "min": 2, "max": 35, "where": "TikTok e Instagram", "ref": 2}, {"name": "ArthurTV", "rate": 1.5, "min": 15, "max": 300, "where": "TikTok", "ref": 2}], "views_max": 300000}, i = 0, v = document.getElementById("views"), mark = document.getElementById("capmark");
+  var D = {"fee": 0.1, "presets": [{"name": "ArthurTV", "rate": 1.5, "min": 15, "max": 300, "where": "TikTok", "ref": 2}, {"name": "Tokyo Girl", "rate": 0.7, "min": 2, "max": 35, "where": "TikTok e Instagram", "ref": 2}], "views_max": 300000}, i = 0, v = document.getElementById("views"), mark = document.getElementById("capmark");
   var f = function (x) { return x.toLocaleString("es", {minimumFractionDigits: x % 1 ? 2 : 0, maximumFractionDigits: 2}); };
   function step(x) { return x > 100000 ? 5000 : x > 20000 ? 1000 : 100; }
   function capViews(p) { return p.max > 0 ? Math.round(p.max / p.rate * 1000) : 0; }
